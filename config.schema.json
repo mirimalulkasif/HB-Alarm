@@ -1,0 +1,83 @@
+{
+  "pluginAlias": "VisonicAlarm",
+  "pluginType": "platform",
+  "singular": true,
+  "headerDisplay": "Controls a Visonic PowerMaster panel through the same PowerManage account used by the Visonic-Go app. Home sets Home mode, Away sets Away mode, and Off disarms the panel.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "title": "Name",
+        "type": "string",
+        "default": "Visonic Alarm",
+        "required": true
+      },
+      "host": {
+        "title": "PowerManage host",
+        "type": "string",
+        "default": "visonic.tycomonitor.com",
+        "description": "Hostname from the Visonic-Go server, without https://. Use your alarm company's host if it is not visonic.tycomonitor.com."
+      },
+      "email": {
+        "title": "Account email",
+        "type": "string",
+        "required": true
+      },
+      "password": {
+        "title": "Account password",
+        "type": "string",
+        "required": true,
+        "x-schema-form": {
+          "type": "password"
+        }
+      },
+      "panelSerial": {
+        "title": "Panel serial",
+        "type": "string",
+        "required": true,
+        "description": "The panel web name or serial shown for this system in Visonic-Go."
+      },
+      "userCode": {
+        "title": "Master user code",
+        "type": "string",
+        "required": true,
+        "description": "The master code used to arm and disarm the panel.",
+        "x-schema-form": {
+          "type": "password"
+        }
+      },
+      "appId": {
+        "title": "App id",
+        "type": "string",
+        "description": "A stable UUID for this Homebridge install. Leave blank to generate one on first launch."
+      },
+      "restVersion": {
+        "title": "REST API version",
+        "type": "string",
+        "default": "9.0"
+      },
+      "partition": {
+        "title": "Partition",
+        "type": "integer",
+        "default": -1,
+        "description": "Use -1 for the whole panel, or a partition number such as 1."
+      },
+      "nightArm": {
+        "title": "Night mode",
+        "type": "string",
+        "default": "home",
+        "oneOf": [
+          { "title": "Arm Home", "enum": ["home"] },
+          { "title": "Arm Away", "enum": ["away"] }
+        ],
+        "description": "Visonic has no separate night state. HomeKit Night uses this mode."
+      },
+      "pollInterval": {
+        "title": "Poll interval (seconds)",
+        "type": "integer",
+        "default": 30,
+        "minimum": 10
+      }
+    }
+  }
+}

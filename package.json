@@ -1,0 +1,35 @@
+{
+  "name": "homebridge-visonic-alarm",
+  "displayName": "Visonic Alarm",
+  "version": "1.0.0",
+  "description": "Arm, disarm, and sync a Visonic PowerMaster alarm with HomeKit.",
+  "license": "Apache-2.0",
+  "keywords": [
+    "homebridge-plugin",
+    "supports-hap"
+  ],
+  "engines": {
+    "node": ">=18.0.0",
+    "homebridge": "^1.6.0 || ^2.0.0"
+  },
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "config.schema.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "npm run build && node --test test/*.test.js",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.0",
+    "homebridge": "^1.11.0",
+    "typescript": "^5.9.0"
+  },
+  "peerDependencies": {
+    "homebridge": "^1.6.0 || ^2.0.0"
+  }
+}
