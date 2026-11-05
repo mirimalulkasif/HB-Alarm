@@ -22,7 +22,7 @@ import {
   PLUGIN_NAME,
   POWERMASTER_REST_VERSION,
 } from './settings';
-import { NightArm, resolveProfile } from './states';
+import { resolveProfile } from './states';
 
 const APP_ID_FILE = 'visonic-alarm-app-id.json';
 
@@ -70,7 +70,6 @@ export class VisonicPlatform implements DynamicPlatformPlugin {
 
     const appId = this.resolveAppId();
     const profile = resolveProfile(this.config.host, this.config.profile);
-    const nightArm: NightArm = this.config.nightArm === 'away' ? 'away' : 'home';
     const pollSeconds = Math.max(MIN_POLL_SECONDS, Number(this.config.pollInterval) || DEFAULT_POLL_SECONDS);
     const client = new VisonicClient({
       host: this.config.host,
@@ -90,7 +89,7 @@ export class VisonicPlatform implements DynamicPlatformPlugin {
     const accessory = existing ?? new this.api.platformAccessory(name, uuid);
     accessory.context.panelSerial = this.config.panelSerial;
 
-    this.accessoryHandler = new VisonicSecurityAccessory(this, accessory, client, profile, nightArm);
+    this.accessoryHandler = new VisonicSecurityAccessory(this, accessory, client);
     if (!existing) {
       this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
     }

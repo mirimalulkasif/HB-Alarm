@@ -7,17 +7,13 @@ class VisonicSecurityAccessory {
     platform;
     accessory;
     client;
-    profile;
-    nightArm;
     service;
     currentState;
     refreshing = false;
-    constructor(platform, accessory, client, profile, nightArm) {
+    constructor(platform, accessory, client) {
         this.platform = platform;
         this.accessory = accessory;
         this.client = client;
-        this.profile = profile;
-        this.nightArm = nightArm;
         const { Characteristic, Service } = this.platform;
         this.currentState = Characteristic.SecuritySystemCurrentState.DISARMED;
         this.accessory.getService(Service.AccessoryInformation)
@@ -28,8 +24,12 @@ class VisonicSecurityAccessory {
             || this.accessory.addService(Service.SecuritySystem, this.accessory.displayName);
         this.service.setCharacteristic(Characteristic.Name, this.accessory.displayName);
         this.service.getCharacteristic(Characteristic.SecuritySystemCurrentState)
+            .setProps({
+            validValues: [states_1.HOMEKIT_HOME, states_1.HOMEKIT_AWAY, states_1.HOMEKIT_DISARM, Characteristic.SecuritySystemCurrentState.ALARM_TRIGGERED],
+        })
             .onGet(() => this.currentState);
         this.service.getCharacteristic(Characteristic.SecuritySystemTargetState)
+            .setProps({ validValues: [states_1.HOMEKIT_HOME, states_1.HOMEKIT_AWAY, states_1.HOMEKIT_DISARM] })
             .onSet((value) => this.setTargetState(value));
         this.service.getCharacteristic(Characteristic.StatusFault)
             .onGet(() => this.service.getCharacteristic(Characteristic.StatusFault).value
@@ -69,7 +69,7 @@ class VisonicSecurityAccessory {
     }
     async setTargetState(value) {
         const target = Number(value);
-        const mode = (0, states_1.targetStateToPanelMode)(target, this.profile, this.nightArm);
+        const mode = (0, states_1.targetStateToPanelMode)(target);
         this.platform.log.info(`Setting the alarm to ${mode}`);
         try {
             await this.client.setMode(mode);

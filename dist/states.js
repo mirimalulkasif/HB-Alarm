@@ -31,28 +31,13 @@ function resolveProfile(host, profile) {
     }
     return 'connectalarm';
 }
-function targetStateToPanelMode(target, profile = 'connectalarm', nightArm = 'home') {
-    if (profile === 'powermaster') {
-        switch (target) {
-            case exports.HOMEKIT_HOME:
-                return 'HOME';
-            case exports.HOMEKIT_AWAY:
-                return 'AWAY';
-            case exports.HOMEKIT_NIGHT:
-                return nightArm === 'away' ? 'AWAY' : 'HOME';
-            case exports.HOMEKIT_DISARM:
-                return 'DISARM';
-            default:
-                throw new Error(`Unsupported HomeKit target state ${target}`);
-        }
-    }
+function targetStateToPanelMode(target) {
     switch (target) {
         case exports.HOMEKIT_HOME:
-            return 'STAY';
+        case exports.HOMEKIT_NIGHT:
+            return 'HOME';
         case exports.HOMEKIT_AWAY:
             return 'AWAY';
-        case exports.HOMEKIT_NIGHT:
-            return 'NIGHT';
         case exports.HOMEKIT_DISARM:
             return 'DISARM';
         default:
@@ -77,7 +62,7 @@ function panelStateToCurrent(raw, alarmActive) {
         return exports.HOMEKIT_AWAY;
     }
     if (state === 'NIGHT' || state === 'ARM_NIGHT' || state === 'ARMED_NIGHT') {
-        return exports.HOMEKIT_NIGHT;
+        return exports.HOMEKIT_HOME;
     }
     if (state === 'DISARM' || state === 'DISARMED' || state === 'READY') {
         return exports.HOMEKIT_DISARM;

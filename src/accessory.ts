@@ -2,7 +2,7 @@ import type { CharacteristicValue, PlatformAccessory, Service } from 'homebridge
 
 import { VisonicApiError, VisonicClient } from './client';
 import type { VisonicPlatform } from './platform';
-import { NightArm, PanelProfile, panelStateToCurrent, targetStateToPanelMode } from './states';
+import { HOMEKIT_AWAY, HOMEKIT_DISARM, HOMEKIT_HOME, panelStateToCurrent, targetStateToPanelMode } from './states';
 
 export class VisonicSecurityAccessory {
   private readonly service: Service;
@@ -13,8 +13,6 @@ export class VisonicSecurityAccessory {
     private readonly platform: VisonicPlatform,
     private readonly accessory: PlatformAccessory,
     private readonly client: VisonicClient,
-    private readonly profile: PanelProfile,
-    private readonly nightArm: NightArm,
   ) {
     const { Characteristic, Service } = this.platform;
 
@@ -30,8 +28,12 @@ export class VisonicSecurityAccessory {
 
     this.service.setCharacteristic(Characteristic.Name, this.accessory.displayName);
     this.service.getCharacteristic(Characteristic.SecuritySystemCurrentState)
+      .setProps({
+        validValues: [HOMEKIT_HOME, HOMEKIT_AWAY, HOMEKIT_DISARM, Characteristic.SecuritySystemCurrentState.ALARM_TRIGGERED],
+      })
       .onGet(() => this.currentState);
     this.service.getCharacteristic(Characteristic.SecuritySystemTargetState)
+      .setProps({ validValues: [HOMEKIT_HOME, HOMEKIT_AWAY, HOMEKIT_DISARM] })
       .onSet((value) => this.setTargetState(value));
     this.service.getCharacteristic(Characteristic.StatusFault)
       .onGet(() => this.service.getCharacteristic(Characteristic.StatusFault).value
@@ -71,7 +73,7 @@ export class VisonicSecurityAccessory {
 
   private async setTargetState(value: CharacteristicValue): Promise<void> {
     const target = Number(value);
-    const mode = targetStateToPanelMode(target, this.profile, this.nightArm);
+    const mode = targetStateToPanelMode(target);
     this.platform.log.info(`Setting the alarm to ${mode}`);
     try {
       await this.client.setMode(mode);

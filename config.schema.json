@@ -2,7 +2,7 @@
   "pluginAlias": "VisonicAlarm",
   "pluginType": "platform",
   "singular": true,
-  "headerDisplay": "Controls a Visonic panel through the ConnectAlarm account. Home sets Stay, Away sets Away, Night sets Night, and Off disarms the panel.",
+  "headerDisplay": "Controls a Visonic panel through the ConnectAlarm account. The only modes are Home, Away, and Disarm.",
   "schema": {
     "type": "object",
     "properties": {
@@ -70,17 +70,7 @@
           { "title": "ConnectAlarm", "enum": ["connectalarm"] },
           { "title": "PowerMaster / Visonic-Go", "enum": ["powermaster"] }
         ],
-        "description": "ConnectAlarm sends Stay, Away, and Night. PowerMaster sends Home and Away."
-      },
-      "nightArm": {
-        "title": "Night mode",
-        "type": "string",
-        "default": "home",
-        "oneOf": [
-          { "title": "Arm Home", "enum": ["home"] },
-          { "title": "Arm Away", "enum": ["away"] }
-        ],
-        "description": "Used only for a PowerMaster profile. ConnectAlarm has its own Night state."
+        "description": "Selects the server API version. Both profiles arm with Home, Away, and Disarm."
       },
       "pollInterval": {
         "title": "Poll interval (seconds)",

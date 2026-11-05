@@ -2,7 +2,7 @@
 
 Homebridge plugin that exposes a Visonic PowerMaster panel as a HomeKit security system.
 
-HomeKit **Home** sets Stay, **Away** sets Away, **Night** sets Night, and **Off** disarms. The plugin signs in to the same ConnectAlarm server and account as the phone app.
+The only modes are **Home**, **Away**, and **Disarm**. HomeKit Off disarms the panel. The plugin signs in to the same ConnectAlarm server and account as the phone app.
 
 ## Install
 
@@ -44,7 +44,7 @@ Restart Homebridge. In the Homebridge UI, add **Visonic Alarm** from the Plugins
 
 `host` is the server address from the ConnectAlarm welcome screen, normally `connect.tycomonitor.com`. `userCode` is the master user code. `panelSerial` is the Panel ID from ConnectAlarm, the integration identification number rather than the number printed on the panel. `partition` of `-1` addresses the whole panel.
 
-A PowerMaster system that uses Visonic-Go instead of ConnectAlarm needs `"profile": "powermaster"` and `"host": "visonic.tycomonitor.com"`. That profile sends Home and Away. Its Night command follows `nightArm`.
+A PowerMaster system that uses Visonic-Go instead of ConnectAlarm needs `"profile": "powermaster"` and `"host": "visonic.tycomonitor.com"`. It uses the same three modes.
 
 Leave `appId` empty. The plugin stores a generated UUID in the Homebridge storage directory and reuses it. Changing it later makes PowerManage treat the bridge as a new client.
 

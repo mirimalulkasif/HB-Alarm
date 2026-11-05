@@ -51,7 +51,6 @@ class VisonicPlatform {
         }
         const appId = this.resolveAppId();
         const profile = (0, states_1.resolveProfile)(this.config.host, this.config.profile);
-        const nightArm = this.config.nightArm === 'away' ? 'away' : 'home';
         const pollSeconds = Math.max(settings_1.MIN_POLL_SECONDS, Number(this.config.pollInterval) || settings_1.DEFAULT_POLL_SECONDS);
         const client = new client_1.VisonicClient({
             host: this.config.host,
@@ -69,7 +68,7 @@ class VisonicPlatform {
         const existing = this.cachedAccessories.find((item) => item.UUID === uuid);
         const accessory = existing ?? new this.api.platformAccessory(name, uuid);
         accessory.context.panelSerial = this.config.panelSerial;
-        this.accessoryHandler = new accessory_1.VisonicSecurityAccessory(this, accessory, client, profile, nightArm);
+        this.accessoryHandler = new accessory_1.VisonicSecurityAccessory(this, accessory, client);
         if (!existing) {
             this.api.registerPlatformAccessories(settings_1.PLUGIN_NAME, settings_1.PLATFORM_NAME, [accessory]);
         }

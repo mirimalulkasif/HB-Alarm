@@ -15,13 +15,13 @@ const {
   targetStateToPanelMode,
 } = require('../dist/states');
 
-test('HomeKit targets map to ConnectAlarm modes', () => {
-  assert.equal(targetStateToPanelMode(HOMEKIT_HOME), 'STAY');
+test('HomeKit targets map to Home, Away, and Disarm', () => {
+  assert.equal(targetStateToPanelMode(HOMEKIT_HOME), 'HOME');
   assert.equal(targetStateToPanelMode(HOMEKIT_AWAY), 'AWAY');
-  assert.equal(targetStateToPanelMode(HOMEKIT_NIGHT), 'NIGHT');
   assert.equal(targetStateToPanelMode(HOMEKIT_DISARM), 'DISARM');
-  assert.equal(targetStateToPanelMode(HOMEKIT_HOME, 'powermaster'), 'HOME');
-  assert.equal(targetStateToPanelMode(HOMEKIT_NIGHT, 'powermaster', 'away'), 'AWAY');
+  assert.equal(targetStateToPanelMode(HOMEKIT_NIGHT), 'HOME');
+  assert.equal(panelStateToCurrent('NIGHT', false), HOMEKIT_HOME);
+  assert.equal(panelStateToCurrent('STAY', false), HOMEKIT_HOME);
 });
 
 test('panel states map to HomeKit current state', () => {

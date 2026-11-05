@@ -11,8 +11,7 @@ export const HOMEKIT_NIGHT = 2;
 export const HOMEKIT_DISARM = 3;
 export const HOMEKIT_ALARM = 4;
 
-export type PanelMode = 'HOME' | 'STAY' | 'AWAY' | 'NIGHT' | 'DISARM';
-export type NightArm = 'home' | 'away';
+export type PanelMode = 'HOME' | 'AWAY' | 'DISARM';
 export type PanelProfile = 'connectalarm' | 'powermaster';
 
 export function resolveProfile(host: string | undefined, profile: unknown): PanelProfile {
@@ -26,33 +25,13 @@ export function resolveProfile(host: string | undefined, profile: unknown): Pane
   return 'connectalarm';
 }
 
-export function targetStateToPanelMode(
-  target: number,
-  profile: PanelProfile = 'connectalarm',
-  nightArm: NightArm = 'home',
-): PanelMode {
-  if (profile === 'powermaster') {
-    switch (target) {
-      case HOMEKIT_HOME:
-        return 'HOME';
-      case HOMEKIT_AWAY:
-        return 'AWAY';
-      case HOMEKIT_NIGHT:
-        return nightArm === 'away' ? 'AWAY' : 'HOME';
-      case HOMEKIT_DISARM:
-        return 'DISARM';
-      default:
-        throw new Error(`Unsupported HomeKit target state ${target}`);
-    }
-  }
-
+export function targetStateToPanelMode(target: number): PanelMode {
   switch (target) {
     case HOMEKIT_HOME:
-      return 'STAY';
+    case HOMEKIT_NIGHT:
+      return 'HOME';
     case HOMEKIT_AWAY:
       return 'AWAY';
-    case HOMEKIT_NIGHT:
-      return 'NIGHT';
     case HOMEKIT_DISARM:
       return 'DISARM';
     default:
@@ -79,7 +58,7 @@ export function panelStateToCurrent(raw: string | null | undefined, alarmActive:
     return HOMEKIT_AWAY;
   }
   if (state === 'NIGHT' || state === 'ARM_NIGHT' || state === 'ARMED_NIGHT') {
-    return HOMEKIT_NIGHT;
+    return HOMEKIT_HOME;
   }
   if (state === 'DISARM' || state === 'DISARMED' || state === 'READY') {
     return HOMEKIT_DISARM;

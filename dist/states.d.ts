@@ -10,11 +10,10 @@ export declare const HOMEKIT_AWAY = 1;
 export declare const HOMEKIT_NIGHT = 2;
 export declare const HOMEKIT_DISARM = 3;
 export declare const HOMEKIT_ALARM = 4;
-export type PanelMode = 'HOME' | 'STAY' | 'AWAY' | 'NIGHT' | 'DISARM';
-export type NightArm = 'home' | 'away';
+export type PanelMode = 'HOME' | 'AWAY' | 'DISARM';
 export type PanelProfile = 'connectalarm' | 'powermaster';
 export declare function resolveProfile(host: string | undefined, profile: unknown): PanelProfile;
-export declare function targetStateToPanelMode(target: number, profile?: PanelProfile, nightArm?: NightArm): PanelMode;
+export declare function targetStateToPanelMode(target: number): PanelMode;
 export declare function panelStateToCurrent(raw: string | null | undefined, alarmActive: boolean): number | null;
 export interface PartitionSnapshot {
     id?: number | string;
