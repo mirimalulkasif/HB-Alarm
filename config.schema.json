@@ -1,0 +1,83 @@
+{
+  "pluginAlias": "VisonicAlarm",
+  "pluginType": "platform",
+  "singular": true,
+  "headerDisplay": "Controls a Visonic panel through the ConnectAlarm account. The only modes are Home, Away, and Disarm.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "title": "Name",
+        "type": "string",
+        "default": "Visonic Alarm",
+        "required": true
+      },
+      "host": {
+        "title": "PowerManage host",
+        "type": "string",
+        "default": "connect.tycomonitor.com",
+        "description": "Server address from the ConnectAlarm app, without https://."
+      },
+      "email": {
+        "title": "Account email",
+        "type": "string",
+        "required": true
+      },
+      "password": {
+        "title": "Account password",
+        "type": "string",
+        "required": true,
+        "x-schema-form": {
+          "type": "password"
+        }
+      },
+      "panelSerial": {
+        "title": "Panel serial",
+        "type": "string",
+        "required": true,
+        "description": "Panel ID from ConnectAlarm. This is the integration identification number, not the printed serial number."
+      },
+      "userCode": {
+        "title": "Master user code",
+        "type": "string",
+        "required": true,
+        "description": "The master code used to arm and disarm the panel.",
+        "x-schema-form": {
+          "type": "password"
+        }
+      },
+      "appId": {
+        "title": "App id",
+        "type": "string",
+        "description": "A stable UUID for this Homebridge install. Leave blank to generate one on first launch."
+      },
+      "restVersion": {
+        "title": "REST API version",
+        "type": "string",
+        "default": "10.0"
+      },
+      "partition": {
+        "title": "Partition",
+        "type": "integer",
+        "default": -1,
+        "description": "Use -1 for the whole panel, or a partition number such as 1."
+      },
+      "profile": {
+        "title": "Panel profile",
+        "type": "string",
+        "default": "connectalarm",
+        "oneOf": [
+          { "title": "ConnectAlarm", "enum": ["connectalarm"] },
+          { "title": "PowerMaster / Visonic-Go", "enum": ["powermaster"] }
+        ],
+        "description": "Selects the server API version. Both profiles arm with Home, Away, and Disarm."
+      },
+      "pollInterval": {
+        "title": "Poll interval (seconds)",
+        "type": "integer",
+        "default": 30,
+        "minimum": 10
+      }
+    }
+  }
+}
