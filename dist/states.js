@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HOMEKIT_ALARM = exports.HOMEKIT_DISARM = exports.HOMEKIT_NIGHT = exports.HOMEKIT_AWAY = exports.HOMEKIT_HOME = void 0;
+exports.resolveProfile = resolveProfile;
 exports.targetStateToPanelMode = targetStateToPanelMode;
 exports.panelStateToCurrent = panelStateToCurrent;
 exports.selectPartitionState = selectPartitionState;
@@ -20,14 +21,38 @@ exports.HOMEKIT_AWAY = 1;
 exports.HOMEKIT_NIGHT = 2;
 exports.HOMEKIT_DISARM = 3;
 exports.HOMEKIT_ALARM = 4;
-function targetStateToPanelMode(target, nightArm = 'home') {
+function resolveProfile(host, profile) {
+    if (profile === 'powermaster' || profile === 'connectalarm') {
+        return profile;
+    }
+    const name = (host || '').toLowerCase();
+    if (name.includes('visonic.tycomonitor.com')) {
+        return 'powermaster';
+    }
+    return 'connectalarm';
+}
+function targetStateToPanelMode(target, profile = 'connectalarm', nightArm = 'home') {
+    if (profile === 'powermaster') {
+        switch (target) {
+            case exports.HOMEKIT_HOME:
+                return 'HOME';
+            case exports.HOMEKIT_AWAY:
+                return 'AWAY';
+            case exports.HOMEKIT_NIGHT:
+                return nightArm === 'away' ? 'AWAY' : 'HOME';
+            case exports.HOMEKIT_DISARM:
+                return 'DISARM';
+            default:
+                throw new Error(`Unsupported HomeKit target state ${target}`);
+        }
+    }
     switch (target) {
         case exports.HOMEKIT_HOME:
-            return 'HOME';
+            return 'STAY';
         case exports.HOMEKIT_AWAY:
             return 'AWAY';
         case exports.HOMEKIT_NIGHT:
-            return nightArm === 'away' ? 'AWAY' : 'HOME';
+            return 'NIGHT';
         case exports.HOMEKIT_DISARM:
             return 'DISARM';
         default:

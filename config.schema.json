@@ -2,7 +2,7 @@
   "pluginAlias": "VisonicAlarm",
   "pluginType": "platform",
   "singular": true,
-  "headerDisplay": "Controls a Visonic PowerMaster panel through the same PowerManage account used by the Visonic-Go app. Home sets Home mode, Away sets Away mode, and Off disarms the panel.",
+  "headerDisplay": "Controls a Visonic panel through the ConnectAlarm account. Home sets Stay, Away sets Away, Night sets Night, and Off disarms the panel.",
   "schema": {
     "type": "object",
     "properties": {
@@ -15,8 +15,8 @@
       "host": {
         "title": "PowerManage host",
         "type": "string",
-        "default": "visonic.tycomonitor.com",
-        "description": "Hostname from the Visonic-Go server, without https://. Use your alarm company's host if it is not visonic.tycomonitor.com."
+        "default": "connect.tycomonitor.com",
+        "description": "Server address from the ConnectAlarm app, without https://."
       },
       "email": {
         "title": "Account email",
@@ -35,7 +35,7 @@
         "title": "Panel serial",
         "type": "string",
         "required": true,
-        "description": "The panel web name or serial shown for this system in Visonic-Go."
+        "description": "Panel ID from ConnectAlarm. This is the integration identification number, not the printed serial number."
       },
       "userCode": {
         "title": "Master user code",
@@ -54,13 +54,23 @@
       "restVersion": {
         "title": "REST API version",
         "type": "string",
-        "default": "9.0"
+        "default": "10.0"
       },
       "partition": {
         "title": "Partition",
         "type": "integer",
         "default": -1,
         "description": "Use -1 for the whole panel, or a partition number such as 1."
+      },
+      "profile": {
+        "title": "Panel profile",
+        "type": "string",
+        "default": "connectalarm",
+        "oneOf": [
+          { "title": "ConnectAlarm", "enum": ["connectalarm"] },
+          { "title": "PowerMaster / Visonic-Go", "enum": ["powermaster"] }
+        ],
+        "description": "ConnectAlarm sends Stay, Away, and Night. PowerMaster sends Home and Away."
       },
       "nightArm": {
         "title": "Night mode",
@@ -70,7 +80,7 @@
           { "title": "Arm Home", "enum": ["home"] },
           { "title": "Arm Away", "enum": ["away"] }
         ],
-        "description": "Visonic has no separate night state. HomeKit Night uses this mode."
+        "description": "Used only for a PowerMaster profile. ConnectAlarm has its own Night state."
       },
       "pollInterval": {
         "title": "Poll interval (seconds)",

@@ -111,15 +111,19 @@ test('HomeKit Home arms the panel and Disarm returns it to disarmed', async () =
     assert.equal(current.value, hap.Characteristic.SecuritySystemCurrentState.DISARMED);
 
     await setCharacteristic(target, hap.Characteristic.SecuritySystemTargetState.STAY_ARM);
-    assert.deepEqual(panel.commands[0], { partition: 1, state: 'HOME' });
+    assert.deepEqual(panel.commands[0], { partition: 1, state: 'STAY' });
     assert.equal(current.value, hap.Characteristic.SecuritySystemCurrentState.STAY_ARM);
 
     await setCharacteristic(target, hap.Characteristic.SecuritySystemTargetState.AWAY_ARM);
     assert.deepEqual(panel.commands[1], { partition: 1, state: 'AWAY' });
     assert.equal(current.value, hap.Characteristic.SecuritySystemCurrentState.AWAY_ARM);
 
+    await setCharacteristic(target, hap.Characteristic.SecuritySystemTargetState.NIGHT_ARM);
+    assert.deepEqual(panel.commands[2], { partition: 1, state: 'NIGHT' });
+    assert.equal(current.value, hap.Characteristic.SecuritySystemCurrentState.NIGHT_ARM);
+
     await setCharacteristic(target, hap.Characteristic.SecuritySystemTargetState.DISARM);
-    assert.deepEqual(panel.commands[2], { partition: 1, state: 'DISARM' });
+    assert.deepEqual(panel.commands[3], { partition: 1, state: 'DISARM' });
     assert.equal(current.value, hap.Characteristic.SecuritySystemCurrentState.DISARMED);
   } finally {
     shutdown();

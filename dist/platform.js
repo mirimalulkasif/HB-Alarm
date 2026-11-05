@@ -7,6 +7,7 @@ const node_path_1 = require("node:path");
 const accessory_1 = require("./accessory");
 const client_1 = require("./client");
 const settings_1 = require("./settings");
+const states_1 = require("./states");
 const APP_ID_FILE = 'visonic-alarm-app-id.json';
 class VisonicPlatform {
     log;
@@ -49,6 +50,7 @@ class VisonicPlatform {
             return;
         }
         const appId = this.resolveAppId();
+        const profile = (0, states_1.resolveProfile)(this.config.host, this.config.profile);
         const nightArm = this.config.nightArm === 'away' ? 'away' : 'home';
         const pollSeconds = Math.max(settings_1.MIN_POLL_SECONDS, Number(this.config.pollInterval) || settings_1.DEFAULT_POLL_SECONDS);
         const client = new client_1.VisonicClient({
@@ -58,7 +60,7 @@ class VisonicPlatform {
             panelSerial: String(this.config.panelSerial),
             userCode: String(this.config.userCode),
             appId,
-            restVersion: this.config.restVersion,
+            restVersion: this.config.restVersion || (profile === 'connectalarm' ? settings_1.DEFAULT_REST_VERSION : settings_1.POWERMASTER_REST_VERSION),
             appType: this.config.appType,
             partition: this.config.partition === undefined ? undefined : Number(this.config.partition),
         });
@@ -67,7 +69,7 @@ class VisonicPlatform {
         const existing = this.cachedAccessories.find((item) => item.UUID === uuid);
         const accessory = existing ?? new this.api.platformAccessory(name, uuid);
         accessory.context.panelSerial = this.config.panelSerial;
-        this.accessoryHandler = new accessory_1.VisonicSecurityAccessory(this, accessory, client, nightArm);
+        this.accessoryHandler = new accessory_1.VisonicSecurityAccessory(this, accessory, client, profile, nightArm);
         if (!existing) {
             this.api.registerPlatformAccessories(settings_1.PLUGIN_NAME, settings_1.PLATFORM_NAME, [accessory]);
         }
@@ -79,7 +81,8 @@ class VisonicPlatform {
         this.pollTimer = setInterval(() => {
             void this.accessoryHandler?.refresh();
         }, pollSeconds * 1000);
-        this.log.info(`Watching the Visonic panel every ${pollSeconds} seconds`);
+        const panelName = profile === 'connectalarm' ? 'ConnectAlarm' : 'PowerMaster';
+        this.log.info(`Watching the ${panelName} panel every ${pollSeconds} seconds`);
     }
     resolveAppId() {
         if (typeof this.config.appId === 'string' && this.config.appId.trim()) {

@@ -2,7 +2,7 @@ import type { CharacteristicValue, PlatformAccessory, Service } from 'homebridge
 
 import { VisonicApiError, VisonicClient } from './client';
 import type { VisonicPlatform } from './platform';
-import { NightArm, panelStateToCurrent, targetStateToPanelMode } from './states';
+import { NightArm, PanelProfile, panelStateToCurrent, targetStateToPanelMode } from './states';
 
 export class VisonicSecurityAccessory {
   private readonly service: Service;
@@ -13,6 +13,7 @@ export class VisonicSecurityAccessory {
     private readonly platform: VisonicPlatform,
     private readonly accessory: PlatformAccessory,
     private readonly client: VisonicClient,
+    private readonly profile: PanelProfile,
     private readonly nightArm: NightArm,
   ) {
     const { Characteristic, Service } = this.platform;
@@ -70,7 +71,7 @@ export class VisonicSecurityAccessory {
 
   private async setTargetState(value: CharacteristicValue): Promise<void> {
     const target = Number(value);
-    const mode = targetStateToPanelMode(target, this.nightArm);
+    const mode = targetStateToPanelMode(target, this.profile, this.nightArm);
     this.platform.log.info(`Setting the alarm to ${mode}`);
     try {
       await this.client.setMode(mode);

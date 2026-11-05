@@ -2,7 +2,7 @@
 
 Homebridge plugin that exposes a Visonic PowerMaster panel as a HomeKit security system.
 
-HomeKit **Home** arms Home, **Away** arms Away, and **Off** disarms. The plugin uses the PowerManage account that already works in the Visonic-Go app, so the panel needs its PowerLink connection and that account must be able to arm the system.
+HomeKit **Home** sets Stay, **Away** sets Away, **Night** sets Night, and **Off** disarms. The plugin signs in to the same ConnectAlarm server and account as the phone app.
 
 ## Install
 
@@ -28,21 +28,23 @@ Restart Homebridge. In the Homebridge UI, add **Visonic Alarm** from the Plugins
     {
       "platform": "VisonicAlarm",
       "name": "Visonic Alarm",
-      "host": "visonic.tycomonitor.com",
+      "profile": "connectalarm",
+      "host": "connect.tycomonitor.com",
       "email": "you@example.com",
-      "password": "your-visonic-go-password",
+      "password": "your-connectalarm-password",
       "panelSerial": "ABC123",
       "userCode": "1234",
-      "restVersion": "9.0",
+      "restVersion": "10.0",
       "partition": -1,
-      "nightArm": "home",
       "pollInterval": 30
     }
   ]
 }
 ```
 
-`userCode` is the panel master code. `panelSerial` is the panel id shown in Visonic-Go. `partition` of `-1` addresses the whole panel. HomeKit Night has no matching Visonic state, so `nightArm` chooses Home or Away.
+`host` is the server address from the ConnectAlarm welcome screen, normally `connect.tycomonitor.com`. `userCode` is the master user code. `panelSerial` is the Panel ID from ConnectAlarm, the integration identification number rather than the number printed on the panel. `partition` of `-1` addresses the whole panel.
+
+A PowerMaster system that uses Visonic-Go instead of ConnectAlarm needs `"profile": "powermaster"` and `"host": "visonic.tycomonitor.com"`. That profile sends Home and Away. Its Night command follows `nightArm`.
 
 Leave `appId` empty. The plugin stores a generated UUID in the Homebridge storage directory and reuses it. Changing it later makes PowerManage treat the bridge as a new client.
 

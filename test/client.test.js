@@ -8,18 +8,20 @@ const {
   HOMEKIT_AWAY,
   HOMEKIT_DISARM,
   HOMEKIT_HOME,
+  HOMEKIT_NIGHT,
   hasActiveAlarm,
   panelStateToCurrent,
   processOutcome,
   targetStateToPanelMode,
 } = require('../dist/states');
 
-test('HomeKit targets map to Visonic modes', () => {
-  assert.equal(targetStateToPanelMode(HOMEKIT_HOME), 'HOME');
+test('HomeKit targets map to ConnectAlarm modes', () => {
+  assert.equal(targetStateToPanelMode(HOMEKIT_HOME), 'STAY');
   assert.equal(targetStateToPanelMode(HOMEKIT_AWAY), 'AWAY');
+  assert.equal(targetStateToPanelMode(HOMEKIT_NIGHT), 'NIGHT');
   assert.equal(targetStateToPanelMode(HOMEKIT_DISARM), 'DISARM');
-  assert.equal(targetStateToPanelMode(2, 'home'), 'HOME');
-  assert.equal(targetStateToPanelMode(2, 'away'), 'AWAY');
+  assert.equal(targetStateToPanelMode(HOMEKIT_HOME, 'powermaster'), 'HOME');
+  assert.equal(targetStateToPanelMode(HOMEKIT_NIGHT, 'powermaster', 'away'), 'AWAY');
 });
 
 test('panel states map to HomeKit current state', () => {

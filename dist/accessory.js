@@ -7,14 +7,16 @@ class VisonicSecurityAccessory {
     platform;
     accessory;
     client;
+    profile;
     nightArm;
     service;
     currentState;
     refreshing = false;
-    constructor(platform, accessory, client, nightArm) {
+    constructor(platform, accessory, client, profile, nightArm) {
         this.platform = platform;
         this.accessory = accessory;
         this.client = client;
+        this.profile = profile;
         this.nightArm = nightArm;
         const { Characteristic, Service } = this.platform;
         this.currentState = Characteristic.SecuritySystemCurrentState.DISARMED;
@@ -67,7 +69,7 @@ class VisonicSecurityAccessory {
     }
     async setTargetState(value) {
         const target = Number(value);
-        const mode = (0, states_1.targetStateToPanelMode)(target, this.nightArm);
+        const mode = (0, states_1.targetStateToPanelMode)(target, this.profile, this.nightArm);
         this.platform.log.info(`Setting the alarm to ${mode}`);
         try {
             await this.client.setMode(mode);
