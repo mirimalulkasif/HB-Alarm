@@ -1,8 +1,8 @@
 export declare const PLATFORM_NAME = "VisonicAlarm";
 export declare const PLUGIN_NAME = "homebridge-visonic-alarm";
 export declare const DEFAULT_HOST = "connect.tycomonitor.com";
-export declare const DEFAULT_REST_VERSION = "10.0";
-export declare const POWERMASTER_REST_VERSION = "9.0";
+export declare const DEFAULT_REST_VERSION = "15.0";
+export declare const POWERMASTER_REST_VERSION = "15.0";
 export declare const DEFAULT_APP_TYPE = "com.visonic.PowerMaxApp";
 export declare const DEFAULT_PARTITION = -1;
 export declare const DEFAULT_POLL_SECONDS = 30;

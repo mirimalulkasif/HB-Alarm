@@ -54,7 +54,7 @@
       "restVersion": {
         "title": "REST API version",
         "type": "string",
-        "default": "10.0"
+        "default": "15.0"
       },
       "partition": {
         "title": "Partition",

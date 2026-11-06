@@ -34,7 +34,7 @@ Restart Homebridge. In the Homebridge UI, add **Visonic Alarm** from the Plugins
       "password": "your-connectalarm-password",
       "panelSerial": "ABC123",
       "userCode": "1234",
-      "restVersion": "10.0",
+      "restVersion": "15.0",
       "partition": -1,
       "pollInterval": 30
     }

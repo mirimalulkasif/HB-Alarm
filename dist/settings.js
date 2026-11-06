@@ -4,8 +4,8 @@ exports.REQUEST_TIMEOUT_MS = exports.PROCESS_POLL_MS = exports.DEFAULT_COMMAND_T
 exports.PLATFORM_NAME = 'VisonicAlarm';
 exports.PLUGIN_NAME = 'homebridge-visonic-alarm';
 exports.DEFAULT_HOST = 'connect.tycomonitor.com';
-exports.DEFAULT_REST_VERSION = '10.0';
-exports.POWERMASTER_REST_VERSION = '9.0';
+exports.DEFAULT_REST_VERSION = '15.0';
+exports.POWERMASTER_REST_VERSION = '15.0';
 exports.DEFAULT_APP_TYPE = 'com.visonic.PowerMaxApp';
 exports.DEFAULT_PARTITION = -1;
 exports.DEFAULT_POLL_SECONDS = 30;

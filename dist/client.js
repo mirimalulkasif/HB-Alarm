@@ -164,7 +164,7 @@ class VisonicClient {
             this.sessionToken = null;
             return this.request(path, { ...request, retried: true });
         }
-        throw new VisonicApiError(errorMessage(payload, response.status), response.status);
+        throw new VisonicApiError(errorMessage(payload, response.status, path), response.status);
     }
 }
 exports.VisonicClient = VisonicClient;
@@ -179,14 +179,14 @@ function parseJson(text) {
         return null;
     }
 }
-function errorMessage(payload, status) {
+function errorMessage(payload, status, path) {
     if (payload && typeof payload.error_message === 'string' && payload.error_message) {
         return payload.error_message;
     }
     if (payload && typeof payload.error_reason_code === 'string' && payload.error_reason_code) {
         return payload.error_reason_code;
     }
-    return `Visonic request failed with HTTP ${status}`;
+    return `Visonic request failed with HTTP ${status} for ${path}`;
 }
 function delay(ms) {
     return new Promise((resolve) => {
