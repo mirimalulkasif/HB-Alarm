@@ -2,7 +2,7 @@ import type { CharacteristicValue, PlatformAccessory, Service } from 'homebridge
 
 import { VisonicApiError, VisonicClient } from './client';
 import type { VisonicPlatform } from './platform';
-import { HOMEKIT_AWAY, HOMEKIT_DISARM, HOMEKIT_HOME, panelStateToCurrent, targetStateToPanelMode } from './states';
+import { panelStateToCurrent, targetStateToPanelMode } from './states';
 
 export class VisonicSecurityAccessory {
   private readonly service: Service;
@@ -25,15 +25,12 @@ export class VisonicSecurityAccessory {
 
     this.service = this.accessory.getService(Service.SecuritySystem)
       || this.accessory.addService(Service.SecuritySystem, this.accessory.displayName);
+    this.service.setPrimaryService(true);
 
     this.service.setCharacteristic(Characteristic.Name, this.accessory.displayName);
     this.service.getCharacteristic(Characteristic.SecuritySystemCurrentState)
-      .setProps({
-        validValues: [HOMEKIT_HOME, HOMEKIT_AWAY, HOMEKIT_DISARM, Characteristic.SecuritySystemCurrentState.ALARM_TRIGGERED],
-      })
       .onGet(() => this.currentState);
     this.service.getCharacteristic(Characteristic.SecuritySystemTargetState)
-      .setProps({ validValues: [HOMEKIT_HOME, HOMEKIT_AWAY, HOMEKIT_DISARM] })
       .onSet((value) => this.setTargetState(value));
     this.service.getCharacteristic(Characteristic.StatusFault)
       .onGet(() => this.service.getCharacteristic(Characteristic.StatusFault).value

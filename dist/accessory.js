@@ -22,14 +22,11 @@ class VisonicSecurityAccessory {
             .setCharacteristic(Characteristic.SerialNumber, this.platform.config.panelSerial ?? 'unknown');
         this.service = this.accessory.getService(Service.SecuritySystem)
             || this.accessory.addService(Service.SecuritySystem, this.accessory.displayName);
+        this.service.setPrimaryService(true);
         this.service.setCharacteristic(Characteristic.Name, this.accessory.displayName);
         this.service.getCharacteristic(Characteristic.SecuritySystemCurrentState)
-            .setProps({
-            validValues: [states_1.HOMEKIT_HOME, states_1.HOMEKIT_AWAY, states_1.HOMEKIT_DISARM, Characteristic.SecuritySystemCurrentState.ALARM_TRIGGERED],
-        })
             .onGet(() => this.currentState);
         this.service.getCharacteristic(Characteristic.SecuritySystemTargetState)
-            .setProps({ validValues: [states_1.HOMEKIT_HOME, states_1.HOMEKIT_AWAY, states_1.HOMEKIT_DISARM] })
             .onSet((value) => this.setTargetState(value));
         this.service.getCharacteristic(Characteristic.StatusFault)
             .onGet(() => this.service.getCharacteristic(Characteristic.StatusFault).value

@@ -86,7 +86,8 @@ export class VisonicPlatform implements DynamicPlatformPlugin {
     const name = this.config.name || 'Visonic Alarm';
     const uuid = this.api.hap.uuid.generate(`${PLUGIN_NAME}:${this.config.panelSerial}:${this.config.partition ?? -1}`);
     const existing = this.cachedAccessories.find((item) => item.UUID === uuid);
-    const accessory = existing ?? new this.api.platformAccessory(name, uuid);
+    const accessory = existing ?? new this.api.platformAccessory(name, uuid, this.api.hap.Categories.SECURITY_SYSTEM);
+    accessory.category = this.api.hap.Categories.SECURITY_SYSTEM;
     accessory.context.panelSerial = this.config.panelSerial;
 
     this.accessoryHandler = new VisonicSecurityAccessory(this, accessory, client);

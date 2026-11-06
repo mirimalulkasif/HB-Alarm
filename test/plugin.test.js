@@ -110,11 +110,7 @@ test('HomeKit Home arms the panel and Disarm returns it to disarmed', async () =
     const target = service.getCharacteristic(hap.Characteristic.SecuritySystemTargetState);
     assert.equal(current.value, hap.Characteristic.SecuritySystemCurrentState.DISARMED);
 
-    assert.deepEqual(target.props.validValues, [
-      hap.Characteristic.SecuritySystemTargetState.STAY_ARM,
-      hap.Characteristic.SecuritySystemTargetState.AWAY_ARM,
-      hap.Characteristic.SecuritySystemTargetState.DISARM,
-    ]);
+    assert.ok(target.props.validValues.includes(hap.Characteristic.SecuritySystemTargetState.NIGHT_ARM));
 
     await setCharacteristic(target, hap.Characteristic.SecuritySystemTargetState.STAY_ARM);
     assert.deepEqual(panel.commands[0], { partition: 1, state: 'HOME' });
@@ -124,8 +120,11 @@ test('HomeKit Home arms the panel and Disarm returns it to disarmed', async () =
     assert.deepEqual(panel.commands[1], { partition: 1, state: 'AWAY' });
     assert.equal(current.value, hap.Characteristic.SecuritySystemCurrentState.AWAY_ARM);
 
+    await setCharacteristic(target, hap.Characteristic.SecuritySystemTargetState.NIGHT_ARM);
+    assert.deepEqual(panel.commands[2], { partition: 1, state: 'HOME' });
+
     await setCharacteristic(target, hap.Characteristic.SecuritySystemTargetState.DISARM);
-    assert.deepEqual(panel.commands[2], { partition: 1, state: 'DISARM' });
+    assert.deepEqual(panel.commands[3], { partition: 1, state: 'DISARM' });
     assert.equal(current.value, hap.Characteristic.SecuritySystemCurrentState.DISARMED);
   } finally {
     shutdown();
