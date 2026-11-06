@@ -64,7 +64,7 @@ class VisonicPlatform {
             partition: this.config.partition === undefined ? undefined : Number(this.config.partition),
         });
         const name = this.config.name || 'Visonic Alarm';
-        const uuid = this.api.hap.uuid.generate(`${settings_1.PLUGIN_NAME}:${this.config.panelSerial}:${this.config.partition ?? -1}`);
+        const uuid = this.api.hap.uuid.generate(`${settings_1.PLUGIN_NAME}:homekit-2:${this.config.panelSerial}:${this.config.partition ?? -1}`);
         const existing = this.cachedAccessories.find((item) => item.UUID === uuid);
         const accessory = existing ?? new this.api.platformAccessory(name, uuid, 11 /* this.api.hap.Categories.SECURITY_SYSTEM */);
         accessory.category = 11 /* this.api.hap.Categories.SECURITY_SYSTEM */;

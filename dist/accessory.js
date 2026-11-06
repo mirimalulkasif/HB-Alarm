@@ -25,8 +25,25 @@ class VisonicSecurityAccessory {
         this.service.setPrimaryService(true);
         this.service.setCharacteristic(Characteristic.Name, this.accessory.displayName);
         this.service.getCharacteristic(Characteristic.SecuritySystemCurrentState)
+            .setProps({
+            validValues: [
+                Characteristic.SecuritySystemCurrentState.STAY_ARM,
+                Characteristic.SecuritySystemCurrentState.AWAY_ARM,
+                Characteristic.SecuritySystemCurrentState.NIGHT_ARM,
+                Characteristic.SecuritySystemCurrentState.DISARMED,
+                Characteristic.SecuritySystemCurrentState.ALARM_TRIGGERED,
+            ],
+        })
             .onGet(() => this.currentState);
         this.service.getCharacteristic(Characteristic.SecuritySystemTargetState)
+            .setProps({
+            validValues: [
+                Characteristic.SecuritySystemTargetState.STAY_ARM,
+                Characteristic.SecuritySystemTargetState.AWAY_ARM,
+                Characteristic.SecuritySystemTargetState.NIGHT_ARM,
+                Characteristic.SecuritySystemTargetState.DISARM,
+            ],
+        })
             .onSet((value) => this.setTargetState(value));
         this.service.getCharacteristic(Characteristic.StatusFault)
             .onGet(() => this.service.getCharacteristic(Characteristic.StatusFault).value
